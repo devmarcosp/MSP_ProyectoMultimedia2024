@@ -1,11 +1,12 @@
 using Microsoft.EntityFrameworkCore;
+using MSP_ProyectoMultimedia2024.Models.Contexts;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddDbContext<CLEVERLAND>(
+builder.Services.AddDbContext<CleverlandContext>(
     options =>
     {
         //options => options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
