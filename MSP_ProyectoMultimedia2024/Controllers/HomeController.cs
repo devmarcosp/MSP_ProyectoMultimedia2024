@@ -18,7 +18,7 @@ namespace MSP_ProyectoMultimedia2024.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult About()
         {
             return View();
         }
