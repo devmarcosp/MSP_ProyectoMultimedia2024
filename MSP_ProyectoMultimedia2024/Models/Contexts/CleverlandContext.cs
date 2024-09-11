@@ -26,37 +26,32 @@ public partial class CleverlandContext : DbContext
 
     public virtual DbSet<Usuarios> Usuarios { get; set; }
 
-   
+  
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Categorias>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Categori__3213E83F95761BE5");
-
-            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.HasKey(e => e.Id).HasName("PK__Categori__3213E83F58F90B5D");
         });
 
         modelBuilder.Entity<Clases>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Clases__3213E83FDA28ECFF");
-
-            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.HasKey(e => e.Id).HasName("PK__Clases__3213E83FD10D45D1");
 
             entity.HasOne(d => d.Curso).WithMany(p => p.Clases)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Clases__curso_id__571DF1D5");
+                .HasConstraintName("FK__Clases__curso_id__6FE99F9F");
         });
 
         modelBuilder.Entity<Cursos>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Cursos__3213E83F0959C95E");
+            entity.HasKey(e => e.Id).HasName("PK__Cursos__3213E83F05A8497A");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.FechaCreacion).HasDefaultValueSql("(getdate())");
 
             entity.HasOne(d => d.Instructor).WithMany(p => p.Cursos)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Cursos__instruct__4E88ABD4");
+                .HasConstraintName("FK__Cursos__instruct__6754599E");
 
             entity.HasMany(d => d.Categoria).WithMany(p => p.Curso)
                 .UsingEntity<Dictionary<string, object>>(
@@ -64,41 +59,41 @@ public partial class CleverlandContext : DbContext
                     r => r.HasOne<Categorias>().WithMany()
                         .HasForeignKey("CategoriaId")
                         .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__Categoria__categ__5441852A"),
+                        .HasConstraintName("FK__Categoria__categ__6D0D32F4"),
                     l => l.HasOne<Cursos>().WithMany()
                         .HasForeignKey("CursoId")
                         .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__Categoria__curso__534D60F1"),
+                        .HasConstraintName("FK__Categoria__curso__6C190EBB"),
                     j =>
                     {
-                        j.HasKey("CursoId", "CategoriaId").HasName("PK__Categori__B0C34884AE119D25");
+                        j.HasKey("CursoId", "CategoriaId").HasName("PK__Categori__B0C34884283604EA");
                         j.ToTable("Categoria_Curso");
                         j.IndexerProperty<int>("CursoId").HasColumnName("curso_id");
-                        j.IndexerProperty<int>("CategoriaId").HasColumnName("categoria_id");
+                        j.IndexerProperty<int>("CategoriaId")
+                            .ValueGeneratedOnAdd()
+                            .HasColumnName("categoria_id");
                     });
         });
 
         modelBuilder.Entity<Registro>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Registro__3213E83FF58BECDD");
+            entity.HasKey(e => e.Id).HasName("PK__Registro__3213E83FF4DCAF7E");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.FechaInscripcion).HasDefaultValueSql("(getdate())");
 
             entity.HasOne(d => d.Curso).WithMany(p => p.Registro)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Registro__curso___5BE2A6F2");
+                .HasConstraintName("FK__Registro__curso___74AE54BC");
 
             entity.HasOne(d => d.Usuario).WithMany(p => p.Registro)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Registro__usuari__5AEE82B9");
+                .HasConstraintName("FK__Registro__usuari__73BA3083");
         });
 
         modelBuilder.Entity<Usuarios>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Usuarios__3213E83F3BC91BA1");
+            entity.HasKey(e => e.Id).HasName("PK__Usuarios__3213E83FAF583A36");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.FechaRegistro).HasDefaultValueSql("(getdate())");
         });
 

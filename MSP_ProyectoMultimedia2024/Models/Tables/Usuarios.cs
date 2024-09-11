@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MSP_ProyectoMultimedia2024.Models.Tables;
 
-[Index("Email", Name = "UQ__Usuarios__AB6E6164C4E2D5F9", IsUnique = true)]
+[Index("Email", Name = "UQ__Usuarios__AB6E61642BE133B1", IsUnique = true)]
 public partial class Usuarios
 {
     [Key]

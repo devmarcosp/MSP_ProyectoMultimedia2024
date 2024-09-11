@@ -18,12 +18,12 @@ public partial class Clases
     public string Titulo { get; set; } = null!;
 
     [Column("contenido", TypeName = "text")]
-    public string? Contenido { get; set; }
+    public string Contenido { get; set; }
 
     [Column("url_video")]
     [StringLength(255)]
     [Unicode(false)]
-    public string? UrlVideo { get; set; }
+    public string UrlVideo { get; set; }
 
     [Column("curso_id")]
     public int CursoId { get; set; }
