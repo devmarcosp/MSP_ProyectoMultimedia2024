@@ -7,9 +7,7 @@ namespace MSP_ProyectoMultimedia2024.Controllers
         // GET: ProductosController
         public ActionResult Index()
         {
-            ViewBag.MiVariable = "Qué es";
-            ViewBag.MiVariable2 = "Qué no es";
-            ViewBag.MiVariable3 = "Qué si es";
+           
             return View();
         }
 

@@ -1,29 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MSP_ProyectoMultimedia2024.Models.Contexts;
 using MSP_ProyectoMultimedia2024.Models.Tables;
+using MSP_ProyectoMultimedia2024.Services.Interfaces;
+using System.Threading.Tasks;
 
 namespace MSP_ProyectoMultimedia2024.Controllers
 {
     public class CursosController : Controller
     {
+        private readonly ICursos _cursosService;
         private readonly CleverlandContext _context;
 
-        public CursosController(CleverlandContext context)
+        public CursosController(ICursos cursosService, CleverlandContext context)
         {
+            _cursosService = cursosService;
             _context = context;
         }
 
         // GET: Cursos
         public async Task<IActionResult> Index()
         {
-            var cleverlandContext = _context.Cursos.Include(c => c.Instructor);
-            return View(await cleverlandContext.ToListAsync());
+            var obtenerIndex = await _cursosService.GetCursosAsync();
+            return View(obtenerIndex);
         }
 
         // GET: Cursos/Details/5
@@ -34,39 +34,34 @@ namespace MSP_ProyectoMultimedia2024.Controllers
                 return NotFound();
             }
 
-            var cursos = await _context.Cursos
-                .Include(c => c.Instructor)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (cursos == null)
+            var curso = await _cursosService.GetDetailsAsync(id);
+            if (curso == null)
             {
                 return NotFound();
             }
 
-            return View(cursos);
+            return View(curso);
         }
 
         // GET: Cursos/Create
         public IActionResult Create()
         {
-            ViewData["InstructorId"] = new SelectList(_context.Usuarios, "Id", "Id");
+            ViewData["InstructorId"] = new SelectList(_context.Usuarios, "Id", "Id");//editar aca join
             return View();
         }
 
         // POST: Cursos/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Titulo,Descripcion,InstructorId,FechaCreacion")] Cursos cursos)
+        public async Task<IActionResult> Create([Bind("Id,Titulo,Descripcion,InstructorId,FechaCreacion")] Cursos curso)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(cursos);
-                await _context.SaveChangesAsync();
+                await _cursosService.AddCursoAsync(curso);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["InstructorId"] = new SelectList(_context.Usuarios, "Id", "Id", cursos.InstructorId);
-            return View(cursos);
+            ViewData["InstructorId"] = new SelectList(_context.Usuarios, "Id", "Id", curso.InstructorId);//editar
+            return View(curso);
         }
 
         // GET: Cursos/Edit/5
@@ -77,23 +72,21 @@ namespace MSP_ProyectoMultimedia2024.Controllers
                 return NotFound();
             }
 
-            var cursos = await _context.Cursos.FindAsync(id);
-            if (cursos == null)
+            var curso = await _cursosService.GetDetailsAsync(id);
+            if (curso == null)
             {
                 return NotFound();
             }
-            ViewData["InstructorId"] = new SelectList(_context.Usuarios, "Id", "Id", cursos.InstructorId);
-            return View(cursos);
+            ViewData["InstructorId"] = new SelectList(_context.Usuarios, "Id", "Id", curso.InstructorId);
+            return View(curso);
         }
 
         // POST: Cursos/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Titulo,Descripcion,InstructorId,FechaCreacion")] Cursos cursos)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Titulo,Descripcion,InstructorId,FechaCreacion")] Cursos curso)
         {
-            if (id != cursos.Id)
+            if (id != curso.Id)
             {
                 return NotFound();
             }
@@ -102,12 +95,11 @@ namespace MSP_ProyectoMultimedia2024.Controllers
             {
                 try
                 {
-                    _context.Update(cursos);
-                    await _context.SaveChangesAsync();
+                    await _cursosService.UpdateCursoAsync(curso);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CursosExists(cursos.Id))
+                    if (!await _cursosService.CursosExistsAsync(curso.Id))
                     {
                         return NotFound();
                     }
@@ -118,8 +110,8 @@ namespace MSP_ProyectoMultimedia2024.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["InstructorId"] = new SelectList(_context.Usuarios, "Id", "Id", cursos.InstructorId);
-            return View(cursos);
+            ViewData["InstructorId"] = new SelectList(_context.Usuarios, "Id", "Id", curso.InstructorId);
+            return View(curso);
         }
 
         // GET: Cursos/Delete/5
@@ -130,15 +122,13 @@ namespace MSP_ProyectoMultimedia2024.Controllers
                 return NotFound();
             }
 
-            var cursos = await _context.Cursos
-                .Include(c => c.Instructor)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (cursos == null)
+            var curso = await _cursosService.GetDetailsAsync(id);
+            if (curso == null)
             {
                 return NotFound();
             }
 
-            return View(cursos);
+            return View(curso);
         }
 
         // POST: Cursos/Delete/5
@@ -146,19 +136,8 @@ namespace MSP_ProyectoMultimedia2024.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var cursos = await _context.Cursos.FindAsync(id);
-            if (cursos != null)
-            {
-                _context.Cursos.Remove(cursos);
-            }
-
-            await _context.SaveChangesAsync();
+            await _cursosService.DeleteCursoAsync(id);
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool CursosExists(int id)
-        {
-            return _context.Cursos.Any(e => e.Id == id);
         }
     }
 }

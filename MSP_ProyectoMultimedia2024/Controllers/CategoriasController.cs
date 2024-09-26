@@ -7,34 +7,29 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MSP_ProyectoMultimedia2024.Models.Contexts;
 using MSP_ProyectoMultimedia2024.Models.Tables;
+using MSP_ProyectoMultimedia2024.Services.Interfaces;
 
 namespace MSP_ProyectoMultimedia2024.Controllers
 {
     public class CategoriasController : Controller
     {
-        private readonly CleverlandContext _context;
+        private readonly ICategorias _categoriasRepository;
 
-        public CategoriasController(CleverlandContext context)
+        public CategoriasController(ICategorias categoriasRepository)
         {
-            _context = context;
+            _categoriasRepository = categoriasRepository;
         }
 
         // GET: Categorias
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Categorias.ToListAsync());
+            return View(await _categoriasRepository.GetAllAsync());
         }
 
         // GET: Categorias/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var categorias = await _context.Categorias
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var categorias = await _categoriasRepository.GetDetailsAsync(id);
             if (categorias == null)
             {
                 return NotFound();
@@ -50,16 +45,13 @@ namespace MSP_ProyectoMultimedia2024.Controllers
         }
 
         // POST: Categorias/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Nombre")] Categorias categorias)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(categorias);
-                await _context.SaveChangesAsync();
+                await _categoriasRepository.AddAsync(categorias);
                 return RedirectToAction(nameof(Index));
             }
             return View(categorias);
@@ -68,22 +60,16 @@ namespace MSP_ProyectoMultimedia2024.Controllers
         // GET: Categorias/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var categorias = await _context.Categorias.FindAsync(id);
+            var categorias = await _categoriasRepository.GetEditAsync(id);
             if (categorias == null)
             {
                 return NotFound();
             }
+
             return View(categorias);
         }
 
         // POST: Categorias/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre")] Categorias categorias)
@@ -97,12 +83,11 @@ namespace MSP_ProyectoMultimedia2024.Controllers
             {
                 try
                 {
-                    _context.Update(categorias);
-                    await _context.SaveChangesAsync();
+                    await _categoriasRepository.UpdateAsync(categorias);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CategoriasExists(categorias.Id))
+                    if (!_categoriasRepository.CategoriasExists(categorias.Id))
                     {
                         return NotFound();
                     }
@@ -119,13 +104,7 @@ namespace MSP_ProyectoMultimedia2024.Controllers
         // GET: Categorias/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var categorias = await _context.Categorias
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var categorias = await _categoriasRepository.GetDeleteAsync(id);
             if (categorias == null)
             {
                 return NotFound();
@@ -139,19 +118,15 @@ namespace MSP_ProyectoMultimedia2024.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var categorias = await _context.Categorias.FindAsync(id);
-            if (categorias != null)
-            {
-                _context.Categorias.Remove(categorias);
-            }
-
-            await _context.SaveChangesAsync();
+            await _categoriasRepository.DeleteConfirmedAsync(id);
             return RedirectToAction(nameof(Index));
         }
 
         private bool CategoriasExists(int id)
         {
-            return _context.Categorias.Any(e => e.Id == id);
+            return _categoriasRepository.CategoriasExists(id);
         }
     }
+
+
 }

@@ -7,40 +7,36 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MSP_ProyectoMultimedia2024.Models.Contexts;
 using MSP_ProyectoMultimedia2024.Models.Tables;
+using MSP_ProyectoMultimedia2024.Services.Interfaces;
+using NuGet.ProjectModel;
 
 namespace MSP_ProyectoMultimedia2024.Controllers
 {
     public class UsuariosController : Controller
     {
-        private readonly CleverlandContext _context;
+        private readonly IUsuarios _usuariosService;
 
-        public UsuariosController(CleverlandContext context)
+        public UsuariosController(IUsuarios usuariosService)
         {
-            _context = context;
+            _usuariosService = usuariosService;
         }
 
         // GET: Usuarios
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Usuarios.ToListAsync());
+            var usuarios = await _usuariosService.GetUsuariosAsync();
+            return View(usuarios);
         }
 
         // GET: Usuarios/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var usuarios = await _context.Usuarios
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (usuarios == null)
-            {
-                return NotFound();
-            }
+            var usuario = await _usuariosService.GetUsuarioByIdAsync(id.Value);
+            if (usuario == null) return NotFound();
 
-            return View(usuarios);
+            return View(usuario);
         }
 
         // GET: Usuarios/Create
@@ -50,88 +46,61 @@ namespace MSP_ProyectoMultimedia2024.Controllers
         }
 
         // POST: Usuarios/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nombre,Apellido,Email,Password,TipoUsuario,FechaRegistro")] Usuarios usuarios)
+        public async Task<IActionResult> Create([Bind("Id,Nombre,Apellido,Email,Password,TipoUsuario,FechaRegistro")] Usuarios usuario)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(usuarios);
-                await _context.SaveChangesAsync();
+                await _usuariosService.AddUsuarioAsync(usuario);
                 return RedirectToAction(nameof(Index));
             }
-            return View(usuarios);
+            return View(usuario);
         }
 
         // GET: Usuarios/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var usuarios = await _context.Usuarios.FindAsync(id);
-            if (usuarios == null)
-            {
-                return NotFound();
-            }
-            return View(usuarios);
+            var usuario = await _usuariosService.GetUsuarioByIdAsync(id.Value);
+            if (usuario == null) return NotFound();
+
+            return View(usuario);
         }
 
         // POST: Usuarios/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Apellido,Email,Password,TipoUsuario,FechaRegistro")] Usuarios usuarios)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Apellido,Email,Password,TipoUsuario,FechaRegistro")] Usuarios usuario)
         {
-            if (id != usuarios.Id)
-            {
-                return NotFound();
-            }
+            if (id != usuario.Id) return NotFound();
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(usuarios);
-                    await _context.SaveChangesAsync();
+                    await _usuariosService.UpdateUsuarioAsync(usuario);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!UsuariosExists(usuarios.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    if (!await UsuarioExists(usuario.Id)) return NotFound();
+                    else throw;
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(usuarios);
+            return View(usuario);
         }
 
         // GET: Usuarios/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var usuarios = await _context.Usuarios
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (usuarios == null)
-            {
-                return NotFound();
-            }
+            var usuario = await _usuariosService.GetUsuarioByIdAsync(id.Value);
+            if (usuario == null) return NotFound();
 
-            return View(usuarios);
+            return View(usuario);
         }
 
         // POST: Usuarios/Delete/5
@@ -139,19 +108,15 @@ namespace MSP_ProyectoMultimedia2024.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var usuarios = await _context.Usuarios.FindAsync(id);
-            if (usuarios != null)
-            {
-                _context.Usuarios.Remove(usuarios);
-            }
-
-            await _context.SaveChangesAsync();
+            await _usuariosService.DeleteUsuarioAsync(id);
             return RedirectToAction(nameof(Index));
         }
 
-        private bool UsuariosExists(int id)
+        private async Task<bool> UsuarioExists(int id)
         {
-            return _context.Usuarios.Any(e => e.Id == id);
+            var usuario = await _usuariosService.GetUsuarioByIdAsync(id);
+            return usuario != null;
         }
     }
 }
+
