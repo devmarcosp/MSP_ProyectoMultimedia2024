@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using MSP_ProyectoMultimedia2024.Models.Contexts;
-using MSP_ProyectoMultimedia2024.Services.Interfaces;
+using MSP_ProyectoMultimedia2024.Services;
 using MSP_ProyectoMultimedia2024.Services.Repository;
 
 
@@ -9,7 +9,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<ICursos, CursosRepository>();
-builder.Services.AddScoped<IRegistros, RegistrosRepository>();
 builder.Services.AddScoped<IUsuarios, UsuariosRepository>();
 builder.Services.AddScoped<ICategorias, CategoriasRepository>();
 

@@ -1,8 +1,8 @@
 ﻿using MSP_ProyectoMultimedia2024.Models.Contexts;
-using MSP_ProyectoMultimedia2024.Models.Tables;
-using MSP_ProyectoMultimedia2024.Services.Interfaces;
+using MSP_ProyectoMultimedia2024.Models.Dto;
 using Microsoft.EntityFrameworkCore;
-
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MSP_ProyectoMultimedia2024.Services.Repository
 {
@@ -15,77 +15,100 @@ namespace MSP_ProyectoMultimedia2024.Services.Repository
             _context = context;
         }
 
-        // Obtener todas las categorías (Index)
-        public async Task<List<Categorias>> GetAllAsync()
+        public async Task<List<CategoriasDTO>> GetAllAsync()
         {
-            return await _context.Categorias.ToListAsync();
+            return await _context.Categorias
+                                 .Select(c => new CategoriasDTO
+                                 {
+                                     Id = c.Id,
+                                     Nombre = c.Nombre
+                                 })
+                                 .ToListAsync();
         }
 
-        // Obtener detalles de una categoría (Details)
-        public async Task<Categorias> GetDetailsAsync(int? id)
+        public async Task<CategoriasDTO> GetDetailsAsync(int? id)
         {
-            if (id == null)
+            var categoria = await _context.Categorias.FindAsync(id);
+            if (categoria == null)
             {
                 return null;
             }
 
-            return await _context.Categorias
-                .FirstOrDefaultAsync(m => m.Id == id);
+            return new CategoriasDTO
+            {
+                Id = categoria.Id,
+                Nombre = categoria.Nombre
+            };
         }
 
-        // Crear una categoría (Create)
-        public async Task AddAsync(Categorias categorias)
+        public async Task<CategoriasDTO> GetEditAsync(int? id)
         {
-            _context.Add(categorias);
+            var categoria = await _context.Categorias.FindAsync(id);
+            if (categoria == null)
+            {
+                return null;
+            }
+
+            return new CategoriasDTO
+            {
+                Id = categoria.Id,
+                Nombre = categoria.Nombre
+            };
+        }
+
+        public async Task<CategoriasDTO> GetDeleteAsync(int? id)
+        {
+            var categoria = await _context.Categorias.FindAsync(id);
+            if (categoria == null)
+            {
+                return null;
+            }
+
+            return new CategoriasDTO
+            {
+                Id = categoria.Id,
+                Nombre = categoria.Nombre
+            };
+        }
+
+        public async Task AddAsync(CategoriasDTO categoriaDto)
+        {
+            var nuevaCategoria = new MSP_ProyectoMultimedia2024.Models.Tables.Categorias
+            {
+                Nombre = categoriaDto.Nombre
+            };
+
+            _context.Categorias.Add(nuevaCategoria);
             await _context.SaveChangesAsync();
         }
 
-        // Obtener una categoría para editar (GET Edit)
-        public async Task<Categorias> GetEditAsync(int? id)
+        public async Task UpdateAsync(CategoriasDTO categoriaDto)
         {
-            if (id == null)
+            var categoriaExistente = await _context.Categorias.FindAsync(categoriaDto.Id);
+            if (categoriaExistente == null)
             {
-                return null;
+                throw new KeyNotFoundException("Categoría no encontrada.");
             }
 
-            return await _context.Categorias.FindAsync(id);
-        }
+            categoriaExistente.Nombre = categoriaDto.Nombre;
 
-        // Actualizar una categoría (POST Edit)
-        public async Task UpdateAsync(Categorias categorias)
-        {
-            _context.Update(categorias);
+            _context.Categorias.Update(categoriaExistente);
             await _context.SaveChangesAsync();
         }
 
-        // Obtener una categoría para eliminar (GET Delete)
-        public async Task<Categorias> GetDeleteAsync(int? id)
-        {
-            if (id == null)
-            {
-                return null;
-            }
-
-            return await _context.Categorias
-                .FirstOrDefaultAsync(m => m.Id == id);
-        }
-
-        // Confirmar eliminación de categoría (POST Delete)
         public async Task DeleteConfirmedAsync(int id)
         {
-            var categorias = await _context.Categorias.FindAsync(id);
-            if (categorias != null)
+            var categoria = await _context.Categorias.FindAsync(id);
+            if (categoria != null)
             {
-                _context.Categorias.Remove(categorias);
+                _context.Categorias.Remove(categoria);
                 await _context.SaveChangesAsync();
             }
         }
 
-        // Comprobar si una categoría existe (CategoriasExists)
         public bool CategoriasExists(int id)
         {
             return _context.Categorias.Any(e => e.Id == id);
         }
     }
-
 }

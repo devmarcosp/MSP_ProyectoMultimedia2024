@@ -1,8 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MSP_ProyectoMultimedia2024.Models.Contexts;
 using MSP_ProyectoMultimedia2024.Models.Tables;
-using MSP_ProyectoMultimedia2024.Services.Interfaces;
-
+using MSP_ProyectoMultimedia2024.Services;
+using MSP_ProyectoMultimedia2024.Models.Dto;
+using MSP_ProyectoMultimedia2024.Models.DTOs;
 
 namespace MSP_ProyectoMultimedia2024.Services.Repository
 {
@@ -15,37 +16,48 @@ namespace MSP_ProyectoMultimedia2024.Services.Repository
             _context = context;
         }
 
-        // Obtener todos los cursos
         public async Task<List<Cursos>> GetCursosAsync()
         {
-            return await _context.Cursos
-                .Include(c => c.Instructor)
-                .ToListAsync();
+            return await _context.Cursos.Include(c => c.Instructor).ToListAsync();
         }
 
-        // Obtener detalles de un curso por id
         public async Task<Cursos> GetDetailsAsync(int? id)
         {
-            return await _context.Cursos
-                .Include(c => c.Instructor)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            return await _context.Cursos.Include(c => c.Instructor).FirstOrDefaultAsync(m => m.Id == id);
         }
 
-        // Agregar un curso
-        public async Task AddCursoAsync(Cursos curso)
+        public async Task<CursosDTO> GetEditAsync(int? id)
         {
-            _context.Cursos.Add(curso);
+            var curso = await _context.Cursos.Include(c => c.Instructor).FirstOrDefaultAsync(m => m.Id == id);
+            if (curso == null)
+            {
+                return null;
+            }
+
+            return new CursosDTO
+            {
+                Id = curso.Id,
+                Titulo = curso.Titulo,
+                Descripcion = curso.Descripcion,
+                InstructorId = curso.InstructorId,
+                FechaCreacion = curso.FechaCreacion
+            };
+        }
+
+        public async Task AddCursoAsync(CursosDTO cursoDto)
+        {
+            var cursoOriginal = cursoDto.ToOriginal();
+            _context.Cursos.Add(cursoOriginal);
             await _context.SaveChangesAsync();
         }
 
-        // Actualizar un curso
-        public async Task UpdateCursoAsync(Cursos curso)
+        public async Task UpdateCursoAsync(CursosDTO cursoDto)
         {
-            _context.Cursos.Update(curso);
+            var cursoOriginal = cursoDto.ToOriginal();
+            _context.Cursos.Update(cursoOriginal);
             await _context.SaveChangesAsync();
         }
 
-        // Eliminar un curso por id
         public async Task DeleteCursoAsync(int id)
         {
             var curso = await _context.Cursos.FindAsync(id);
@@ -56,12 +68,19 @@ namespace MSP_ProyectoMultimedia2024.Services.Repository
             }
         }
 
-        // Verificar si un curso existe por id
         public async Task<bool> CursosExistsAsync(int id)
         {
             return await _context.Cursos.AnyAsync(e => e.Id == id);
         }
 
-        
+        Task ICursos.AddCursoAsync(Cursos curso)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task ICursos.UpdateCursoAsync(Cursos curso)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

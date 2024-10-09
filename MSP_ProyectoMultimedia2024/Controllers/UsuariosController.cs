@@ -6,8 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MSP_ProyectoMultimedia2024.Models.Contexts;
+using MSP_ProyectoMultimedia2024.Models.Dto;
 using MSP_ProyectoMultimedia2024.Models.Tables;
-using MSP_ProyectoMultimedia2024.Services.Interfaces;
+using MSP_ProyectoMultimedia2024.Services;
 using NuGet.ProjectModel;
 
 namespace MSP_ProyectoMultimedia2024.Controllers
@@ -59,14 +60,16 @@ namespace MSP_ProyectoMultimedia2024.Controllers
         }
 
         // GET: Usuarios/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int? id, UsuariosDTO usuarioDto)
         {
             if (id == null) return NotFound();
 
             var usuario = await _usuariosService.GetUsuarioByIdAsync(id.Value);
             if (usuario == null) return NotFound();
+            {
+            };
 
-            return View(usuario);
+            return View(usuarioDto);
         }
 
         // POST: Usuarios/Edit/5

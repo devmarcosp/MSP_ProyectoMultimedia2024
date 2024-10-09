@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using MSP_ProyectoMultimedia2024.Models.Contexts;
+using MSP_ProyectoMultimedia2024.Models.Dto;
 using MSP_ProyectoMultimedia2024.Models.Tables;
-using MSP_ProyectoMultimedia2024.Services.Interfaces;
+using MSP_ProyectoMultimedia2024.Services;
+using MSP_ProyectoMultimedia2024.Services.Repository;
 using System.Threading.Tasks;
 
 namespace MSP_ProyectoMultimedia2024.Controllers
@@ -11,19 +11,17 @@ namespace MSP_ProyectoMultimedia2024.Controllers
     public class CursosController : Controller
     {
         private readonly ICursos _cursosService;
-        private readonly CleverlandContext _context;
 
-        public CursosController(ICursos cursosService, CleverlandContext context)
+        public CursosController(ICursos cursosService)
         {
             _cursosService = cursosService;
-            _context = context;
         }
 
         // GET: Cursos
         public async Task<IActionResult> Index()
         {
-            var obtenerIndex = await _cursosService.GetCursosAsync();
-            return View(obtenerIndex);
+            var cursos = await _cursosService.GetCursosAsync();
+            return View(cursos);
         }
 
         // GET: Cursos/Details/5
@@ -46,7 +44,6 @@ namespace MSP_ProyectoMultimedia2024.Controllers
         // GET: Cursos/Create
         public IActionResult Create()
         {
-            ViewData["InstructorId"] = new SelectList(_context.Usuarios, "Id", "Id");//editar aca join
             return View();
         }
 
@@ -60,25 +57,23 @@ namespace MSP_ProyectoMultimedia2024.Controllers
                 await _cursosService.AddCursoAsync(curso);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["InstructorId"] = new SelectList(_context.Usuarios, "Id", "Id", curso.InstructorId);//editar
             return View(curso);
         }
 
         // GET: Cursos/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int? id )
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var curso = await _cursosService.GetDetailsAsync(id);
-            if (curso == null)
+            var cursoDTO = await _cursosService.GetEditAsync(id);
+            if (cursoDTO == null)
             {
                 return NotFound();
             }
-            ViewData["InstructorId"] = new SelectList(_context.Usuarios, "Id", "Id", curso.InstructorId);
-            return View(curso);
+            return View(cursoDTO);
         }
 
         // POST: Cursos/Edit/5
@@ -97,20 +92,16 @@ namespace MSP_ProyectoMultimedia2024.Controllers
                 {
                     await _cursosService.UpdateCursoAsync(curso);
                 }
-                catch (DbUpdateConcurrencyException)
+                catch
                 {
                     if (!await _cursosService.CursosExistsAsync(curso.Id))
                     {
                         return NotFound();
                     }
-                    else
-                    {
-                        throw;
-                    }
+                    throw;
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["InstructorId"] = new SelectList(_context.Usuarios, "Id", "Id", curso.InstructorId);
             return View(curso);
         }
 

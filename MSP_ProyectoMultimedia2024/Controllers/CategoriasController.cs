@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using MSP_ProyectoMultimedia2024.Models.Dto;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using MSP_ProyectoMultimedia2024.Models.Contexts;
-using MSP_ProyectoMultimedia2024.Models.Tables;
-using MSP_ProyectoMultimedia2024.Services.Interfaces;
 
 namespace MSP_ProyectoMultimedia2024.Controllers
 {
@@ -23,19 +17,8 @@ namespace MSP_ProyectoMultimedia2024.Controllers
         // GET: Categorias
         public async Task<IActionResult> Index()
         {
-            return View(await _categoriasRepository.GetAllAsync());
-        }
-
-        // GET: Categorias/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            var categorias = await _categoriasRepository.GetDetailsAsync(id);
-            if (categorias == null)
-            {
-                return NotFound();
-            }
-
-            return View(categorias);
+            var categorias = await _categoriasRepository.GetAllAsync();
+            return View(categorias);  // Asegúrate de tener una vista llamada Index.cshtml
         }
 
         // GET: Categorias/Create
@@ -47,34 +30,33 @@ namespace MSP_ProyectoMultimedia2024.Controllers
         // POST: Categorias/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nombre")] Categorias categorias)
+        public async Task<IActionResult> Create([Bind("Nombre")] CategoriasDTO categoriaDTO)
         {
             if (ModelState.IsValid)
             {
-                await _categoriasRepository.AddAsync(categorias);
+                await _categoriasRepository.AddAsync(categoriaDTO);
                 return RedirectToAction(nameof(Index));
             }
-            return View(categorias);
+            return View(categoriaDTO);
         }
 
         // GET: Categorias/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            var categorias = await _categoriasRepository.GetEditAsync(id);
-            if (categorias == null)
+            var categoriaDTO = await _categoriasRepository.GetEditAsync(id);
+            if (categoriaDTO == null)
             {
                 return NotFound();
             }
-
-            return View(categorias);
+            return View(categoriaDTO);
         }
 
         // POST: Categorias/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre")] Categorias categorias)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre")] CategoriasDTO categoriaDTO)
         {
-            if (id != categorias.Id)
+            if (id != categoriaDTO.Id)
             {
                 return NotFound();
             }
@@ -83,11 +65,11 @@ namespace MSP_ProyectoMultimedia2024.Controllers
             {
                 try
                 {
-                    await _categoriasRepository.UpdateAsync(categorias);
+                    await _categoriasRepository.UpdateAsync(categoriaDTO);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!_categoriasRepository.CategoriasExists(categorias.Id))
+                    if (!_categoriasRepository.CategoriasExists(categoriaDTO.Id))
                     {
                         return NotFound();
                     }
@@ -98,35 +80,7 @@ namespace MSP_ProyectoMultimedia2024.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(categorias);
-        }
-
-        // GET: Categorias/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            var categorias = await _categoriasRepository.GetDeleteAsync(id);
-            if (categorias == null)
-            {
-                return NotFound();
-            }
-
-            return View(categorias);
-        }
-
-        // POST: Categorias/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            await _categoriasRepository.DeleteConfirmedAsync(id);
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool CategoriasExists(int id)
-        {
-            return _categoriasRepository.CategoriasExists(id);
+            return View(categoriaDTO);
         }
     }
-
-
 }

@@ -1,33 +1,37 @@
-﻿@model MSP_ProyectoMultimedia2024.Models.Tables.Categorias
+﻿@model MSP_ProyectoMultimedia2024.Models.Dto.CategoriasDTO
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Crear Categoría";
 }
 
-<h1>Create</h1>
+<h1>Crear Nueva Categoría</h1>
 
-<h4>Categorias</h4>
+<h4>Esta sección es para añadir las categorias de los cursos disponibles</h4>
+<p>Ejemplo de Categorias: Programación, Matematicas, etc</p>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Nombre" class="control-label"></label>
-                <input asp-for="Nombre" class="form-control" />
-                <span asp-validation-for="Nombre" class="text-danger"></span>
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label asp-for="Nombre" class="control-label"></label>
+                    <input asp-for="Nombre" class="form-control" />
+                    <span asp-validation-for="Nombre" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+
+            <div class="form-group text-right">
+                <a asp-action="Index" class="btn btn-secondary">Volver</a>
+                <input type="submit" value="Guardar Categoría" class="btn btn-success" />
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

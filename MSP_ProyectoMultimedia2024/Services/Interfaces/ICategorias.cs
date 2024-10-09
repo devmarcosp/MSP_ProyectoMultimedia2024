@@ -1,18 +1,13 @@
-﻿using MSP_ProyectoMultimedia2024.Models.Tables;
+﻿using MSP_ProyectoMultimedia2024.Models.Dto;
 
-
-namespace MSP_ProyectoMultimedia2024.Services.Interfaces
+public interface ICategorias
 {
-    public interface ICategorias
-    {
-        Task<List<Categorias>> GetAllAsync();
-        Task<Categorias> GetDetailsAsync(int? id);
-        Task AddAsync(Categorias categorias);
-        Task<Categorias> GetEditAsync(int? id);
-        Task UpdateAsync(Categorias categorias);
-        Task<Categorias> GetDeleteAsync(int? id);
-        Task DeleteConfirmedAsync(int id);
-        bool CategoriasExists(int id);
-    }
-
+    Task<List<CategoriasDTO>> GetAllAsync();
+    Task<CategoriasDTO> GetDetailsAsync(int? id);
+    Task<CategoriasDTO> GetDeleteAsync(int? id);
+    Task<CategoriasDTO> GetEditAsync(int? id);
+    Task AddAsync(CategoriasDTO categoriaDto);
+    Task UpdateAsync(CategoriasDTO categoriaDto);
+    Task DeleteConfirmedAsync(int id);
+    bool CategoriasExists(int id);
 }
