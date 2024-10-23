@@ -20,9 +20,14 @@ namespace MSP_ProyectoMultimedia2024.Controllers
         // GET: Cursos
         public async Task<IActionResult> Index()
         {
-            var cursos = await _cursosService.GetCursosAsync();
-            return View(cursos);
+            return View(await _cursosService.GetCursosAsync());
         }
+
+        public async Task<IActionResult> ListaCursos()
+        {
+            return PartialView (await _cursosService.GetCursosAsync());
+         
+        } 
 
         // GET: Cursos/Details/5
         public async Task<IActionResult> Details(int? id)

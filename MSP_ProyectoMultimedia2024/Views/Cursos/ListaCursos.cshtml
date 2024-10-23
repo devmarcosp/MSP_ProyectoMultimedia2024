@@ -1,0 +1,51 @@
+﻿@model IEnumerable<MSP_ProyectoMultimedia2024.Models.Tables.Cursos>
+
+@{
+    ViewData["Title"] = "Cursos";
+}
+
+<h1 class="pt-4">Listado de Cursos</h1>
+
+<p class="text-right">
+    <a asp-action="Create" class="btn btn-lg btn-success">Agregar Nuevo Curso</a>
+</p>
+
+<table id="cursosTable" class="table table-striped">
+    <thead>
+        <tr>
+            <th>Título</th>
+            <th>Descripción</th>
+            <th>Instructor</th>
+            <th>Fecha de Creación</th>
+            <th class="text-right">Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Titulo)</td>
+                <td>@Html.DisplayFor(modelItem => item.Descripcion)</td>
+                <td>@Html.DisplayFor(modelItem => item.InstructorId)</td>
+                <td>@Html.DisplayFor(modelItem => item.FechaCreacion)</td>
+                <td class="text-right">
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-primary">Editar</a>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Detalles</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+    <script>
+        $(document).ready(function () {
+            $('#cursosTable').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json"
+                }
+            });
+        });
+    </script>
+
