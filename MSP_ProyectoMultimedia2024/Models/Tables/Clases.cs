@@ -12,10 +12,11 @@ public partial class Clases
     [Column("id")]
     public int Id { get; set; }
 
+    [Required]
     [Column("titulo")]
     [StringLength(255)]
     [Unicode(false)]
-    public string Titulo { get; set; } = null!;
+    public string Titulo { get; set; }
 
     [Column("contenido", TypeName = "text")]
     public string Contenido { get; set; }
@@ -33,5 +34,5 @@ public partial class Clases
 
     [ForeignKey("CursoId")]
     [InverseProperty("Clases")]
-    public virtual Cursos Curso { get; set; } = null!;
+    public virtual Cursos Curso { get; set; }
 }

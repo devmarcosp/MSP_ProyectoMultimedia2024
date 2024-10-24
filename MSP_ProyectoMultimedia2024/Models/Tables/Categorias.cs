@@ -12,12 +12,12 @@ public partial class Categorias
     [Column("id")]
     public int Id { get; set; }
 
+    [Required]
     [Column("nombre")]
     [StringLength(100)]
     [Unicode(false)]
-    public string Nombre { get; set; } = null!;
+    public string Nombre { get; set; }
 
-    [ForeignKey("CategoriaId")]
     [InverseProperty("Categoria")]
-    public virtual ICollection<Cursos> Curso { get; set; } = new List<Cursos>();
+    public virtual ICollection<CategoriaCurso> CategoriaCurso { get; set; } = new List<CategoriaCurso>();
 }

@@ -1,0 +1,54 @@
+﻿@model MSP_ProyectoMultimedia2024.Models.Tables.Registro
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<div class="container mt-5 p-4" style="background-color: #f0f0f0; border-radius: 10px;">
+    <h1 class="text-center mb-4" style="font-family: Arial, sans-serif; color: #333;">Editar Registro</h1>
+
+    <h4 class="text-center" style="font-family: 'Georgia', serif; color: #555;">Registro</h4>
+    <hr />
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+
+                <div class="form-group">
+                    <label asp-for="UsuarioId" class="control-label" style="font-weight: bold; color: #444;"></label>
+                    <select asp-for="UsuarioId" class="form-control" asp-items="ViewBag.UsuarioId" style="border: 1px solid #ccc; border-radius: 5px;"></select>
+                    <span asp-validation-for="UsuarioId" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="CursoId" class="control-label" style="font-weight: bold; color: #444;"></label>
+                    <select asp-for="CursoId" class="form-control" asp-items="ViewBag.CursoId" style="border: 1px solid #ccc; border-radius: 5px;"></select>
+                    <span asp-validation-for="CursoId" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="FechaInscripcion" class="control-label" style="font-weight: bold; color: #444;"></label>
+                    <input asp-for="FechaInscripcion" class="form-control" style="border: 1px solid #ccc; border-radius: 5px;" />
+                    <span asp-validation-for="FechaInscripcion" class="text-danger"></span>
+                </div>
+
+                <div class="form-row mt-4">
+                    <div class="col-md-6">
+                        <a href="/Home/Mantenedores" class="btn btn-secondary" style="width: 100%;">Volver</a>
+                    </div>
+                    <div class="col-md-6 text-right">
+                        <input type="submit" value="Guardar Cambios" class="btn btn-primary" style="width: 100%;" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

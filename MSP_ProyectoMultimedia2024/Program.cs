@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using MSP_ProyectoMultimedia2024.Models.Contexts;
+using MSP_ProyectoMultimedia2024.Models.Tables;
+using MSP_ProyectoMultimedia2024.Repositories;
 using MSP_ProyectoMultimedia2024.Services;
 using MSP_ProyectoMultimedia2024.Services.Repository;
 
@@ -11,6 +13,10 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<ICursos, CursosRepository>();
 builder.Services.AddScoped<IUsuarios, UsuariosRepository>();
 builder.Services.AddScoped<ICategorias, CategoriasRepository>();
+builder.Services.AddScoped<IInstructores, InstructoresRepository>();
+builder.Services.AddScoped<ICategoriaCurso, CategoriaCursoRepository>();
+builder.Services.AddScoped<IClases, ClasesRepository>();
+builder.Services.AddScoped<IRegistros, RegistrosRepository>();
 
 builder.Services.AddDbContext<CleverlandContext>(
     options =>

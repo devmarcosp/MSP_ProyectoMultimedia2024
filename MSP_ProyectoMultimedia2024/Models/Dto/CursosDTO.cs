@@ -28,10 +28,7 @@ namespace MSP_ProyectoMultimedia2024.Models.Dto
     [Column("fecha_creacion", TypeName = "datetime")]
     public DateTime? FechaCreacion { get; set; }
 
-    public virtual ICollection<Clases> Clases { get; set; } = new List<Clases>();
-    public virtual Usuarios Instructor { get; set; } = null!;
-    public virtual ICollection<Registro> Registro { get; set; } = new List<Registro>();
-    public virtual ICollection<Categorias> Categoria { get; set; } = new List<Categorias>();
+   
 }
 
 

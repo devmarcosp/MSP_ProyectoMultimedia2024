@@ -23,9 +23,9 @@ public partial class Registro
 
     [ForeignKey("CursoId")]
     [InverseProperty("Registro")]
-    public virtual Cursos Curso { get; set; } = null!;
+    public virtual Cursos Curso { get; set; }
 
     [ForeignKey("UsuarioId")]
     [InverseProperty("Registro")]
-    public virtual Usuarios Usuario { get; set; } = null!;
+    public virtual Usuarios Usuario { get; set; }
 }

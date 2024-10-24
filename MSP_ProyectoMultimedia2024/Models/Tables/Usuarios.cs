@@ -13,30 +13,35 @@ public partial class Usuarios
     [Column("id")]
     public int Id { get; set; }
 
+    [Required]
     [Column("nombre")]
     [StringLength(100)]
     [Unicode(false)]
-    public string Nombre { get; set; } = null!;
+    public string Nombre { get; set; }
 
+    [Required]
     [Column("apellido")]
     [StringLength(100)]
     [Unicode(false)]
-    public string Apellido { get; set; } = null!;
+    public string Apellido { get; set; }
 
+    [Required]
     [Column("email")]
     [StringLength(150)]
     [Unicode(false)]
-    public string Email { get; set; } = null!;
+    public string Email { get; set; }
 
+    [Required]
     [Column("password")]
     [StringLength(255)]
     [Unicode(false)]
-    public string Password { get; set; } = null!;
+    public string Password { get; set; }
 
+    [Required]
     [Column("tipo_usuario")]
     [StringLength(10)]
     [Unicode(false)]
-    public string TipoUsuario { get; set; } = null!;
+    public string TipoUsuario { get; set; }
 
     [Column("fecha_registro", TypeName = "datetime")]
     public DateTime? FechaRegistro { get; set; }

@@ -1,8 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MSP_ProyectoMultimedia2024.Models.Contexts;
 using MSP_ProyectoMultimedia2024.Models.Tables;
-using MSP_ProyectoMultimedia2024.Services;
 using MSP_ProyectoMultimedia2024.Models.Dto;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 using MSP_ProyectoMultimedia2024.Models.DTOs;
 
 namespace MSP_ProyectoMultimedia2024.Services.Repository
@@ -71,16 +72,6 @@ namespace MSP_ProyectoMultimedia2024.Services.Repository
         public async Task<bool> CursosExistsAsync(int id)
         {
             return await _context.Cursos.AnyAsync(e => e.Id == id);
-        }
-
-        Task ICursos.AddCursoAsync(Cursos curso)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task ICursos.UpdateCursoAsync(Cursos curso)
-        {
-            throw new NotImplementedException();
         }
     }
 }

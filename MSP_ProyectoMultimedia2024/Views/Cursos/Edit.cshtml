@@ -4,50 +4,53 @@
     ViewData["Title"] = "Editar Curso";
 }
 
-<h1>Editar Curso</h1>
+<div class="container mt-5 p-4" style="background-color: #f0f0f0; border-radius: 10px;">
+    <h1 class="text-center mb-4" style="font-family: Arial, sans-serif; color: #333;">Editar Curso</h1>
 
-<hr />
-<div class="row">
-    <div class="col-md-6">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
+    <hr />
 
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label asp-for="Titulo" class="control-label"></label>
-                    <input asp-for="Titulo" class="form-control" />
-                    <span asp-validation-for="Titulo" class="text-danger"></span>
-                </div>
-                <div class="form-group col-md-6">
-                    <label asp-for="Descripcion" class="control-label"></label>
-                    <input asp-for="Descripcion" class="form-control" />
-                    <span asp-validation-for="Descripcion" class="text-danger"></span>
-                </div>
-            </div>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
 
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label asp-for="InstructorId" class="control-label"></label>
-                    <select asp-for="InstructorId" class="form-control" asp-items="ViewBag.InstructorId"></select>
-                    <span asp-validation-for="InstructorId" class="text-danger"></span>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label asp-for="Titulo" class="control-label" style="font-weight: bold; color: #444;"></label>
+                        <input asp-for="Titulo" class="form-control" style="border: 1px solid #ccc; border-radius: 5px;" />
+                        <span asp-validation-for="Titulo" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label asp-for="Descripcion" class="control-label" style="font-weight: bold; color: #444;"></label>
+                        <input asp-for="Descripcion" class="form-control" style="border: 1px solid #ccc; border-radius: 5px;" />
+                        <span asp-validation-for="Descripcion" class="text-danger"></span>
+                    </div>
                 </div>
-                <div class="form-group col-md-6">
-                    <label asp-for="FechaCreacion" class="control-label"></label>
-                    <input asp-for="FechaCreacion" class="form-control" />
-                    <span asp-validation-for="FechaCreacion" class="text-danger"></span>
-                </div>
-            </div>
 
-            <div class="form-row">
-                <div class="col-md-6">
-                    <a asp-action="Index" class="btn btn-secondary">Volver a la Lista</a>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label asp-for="InstructorId" class="control-label" style="font-weight: bold; color: #444;"></label>
+                        <select asp-for="InstructorId" class="form-control" asp-items="ViewBag.InstructorId" style="border: 1px solid #ccc; border-radius: 5px;"></select>
+                        <span asp-validation-for="InstructorId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label asp-for="FechaCreacion" class="control-label" style="font-weight: bold; color: #444;"></label>
+                        <input asp-for="FechaCreacion" class="form-control" style="border: 1px solid #ccc; border-radius: 5px;" />
+                        <span asp-validation-for="FechaCreacion" class="text-danger"></span>
+                    </div>
                 </div>
-                <div class="col-md-6 text-right">
-                    <input type="submit" value="Guardar Curso" class="btn btn-success" />
+
+                <div class="form-row mt-4">
+                    <div class="col-md-6">
+                        <a href="/Home/Mantenedores" class="btn btn-secondary" style="width: 100%;">Volver</a>
+                    </div>
+                    <div class="col-md-6 text-right">
+                        <input type="submit" value="Guardar Curso" class="btn btn-success" style="width: 100%;" />
+                    </div>
                 </div>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 </div>
 

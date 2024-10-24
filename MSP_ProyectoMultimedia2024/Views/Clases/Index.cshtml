@@ -1,0 +1,45 @@
+﻿@model IEnumerable<MSP_ProyectoMultimedia2024.Models.Tables.Clases>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="container mt-5 p-4" style="background-color: #f0f0f0; border-radius: 10px;">
+    <h1 class="text-center mb-4" style="font-family: Arial, sans-serif; color: #333;">Listado de Clases</h1>
+
+    <p class="text-right mb-3" style="width: 80%; margin: 0 auto;">
+        <a asp-action="Create" class="btn btn-lg btn-success">Crear Nueva Clase</a>
+    </p>
+
+    <div class="table-responsive" style="width: 80%; margin: 0 auto;">
+        <table class="table table-hover table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.Titulo)</th>
+                    <th>@Html.DisplayNameFor(model => model.Contenido)</th>
+                    <th>@Html.DisplayNameFor(model => model.UrlVideo)</th>
+                    <th>@Html.DisplayNameFor(model => model.Orden)</th>
+                    <th>@Html.DisplayNameFor(model => model.Curso.Descripcion)</th>
+                    <th class="text-right">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.Titulo)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Contenido)</td>
+                        <td>@Html.DisplayFor(modelItem => item.UrlVideo)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Orden)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Curso.Descripcion)</td>
+                        <td class="text-right">
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-primary">Editar</a>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Detalles</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Eliminar</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

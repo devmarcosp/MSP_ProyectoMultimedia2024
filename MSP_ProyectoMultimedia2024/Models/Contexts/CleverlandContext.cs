@@ -16,19 +16,41 @@ public partial class CleverlandContext : DbContext
     {
     }
 
+    public virtual DbSet<CategoriaCurso> CategoriaCurso { get; set; }
+
     public virtual DbSet<Categorias> Categorias { get; set; }
 
     public virtual DbSet<Clases> Clases { get; set; }
 
     public virtual DbSet<Cursos> Cursos { get; set; }
 
+    public virtual DbSet<Instructores> Instructores { get; set; }
+
     public virtual DbSet<Registro> Registro { get; set; }
 
     public virtual DbSet<Usuarios> Usuarios { get; set; }
 
-  
+   /* protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Server= MARCOS\\SQL2023; Database=CLEVERLAND;TrustServerCertificate=True;Trusted_Connection=True;");
+    */
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<CategoriaCurso>(entity =>
+        {
+            entity.HasKey(e => new { e.CursoId, e.CategoriaId }).HasName("PK__Categori__B0C34884283604EA");
+
+            entity.Property(e => e.CategoriaId).ValueGeneratedOnAdd();
+
+            entity.HasOne(d => d.Categoria).WithMany(p => p.CategoriaCurso)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__Categoria__categ__6D0D32F4");
+
+            entity.HasOne(d => d.Curso).WithMany(p => p.CategoriaCurso)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__Categoria__curso__6C190EBB");
+        });
+
         modelBuilder.Entity<Categorias>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Categori__3213E83F58F90B5D");
@@ -52,27 +74,11 @@ public partial class CleverlandContext : DbContext
             entity.HasOne(d => d.Instructor).WithMany(p => p.Cursos)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Cursos__instruct__6754599E");
+        });
 
-            entity.HasMany(d => d.Categoria).WithMany(p => p.Curso)
-                .UsingEntity<Dictionary<string, object>>(
-                    "CategoriaCurso",
-                    r => r.HasOne<Categorias>().WithMany()
-                        .HasForeignKey("CategoriaId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__Categoria__categ__6D0D32F4"),
-                    l => l.HasOne<Cursos>().WithMany()
-                        .HasForeignKey("CursoId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__Categoria__curso__6C190EBB"),
-                    j =>
-                    {
-                        j.HasKey("CursoId", "CategoriaId").HasName("PK__Categori__B0C34884283604EA");
-                        j.ToTable("Categoria_Curso");
-                        j.IndexerProperty<int>("CursoId").HasColumnName("curso_id");
-                        j.IndexerProperty<int>("CategoriaId")
-                            .ValueGeneratedOnAdd()
-                            .HasColumnName("categoria_id");
-                    });
+        modelBuilder.Entity<Instructores>(entity =>
+        {
+            entity.HasKey(e => e.IdInstructor).HasName("PK__Instruct__1CCC4C1240208BF4");
         });
 
         modelBuilder.Entity<Registro>(entity =>

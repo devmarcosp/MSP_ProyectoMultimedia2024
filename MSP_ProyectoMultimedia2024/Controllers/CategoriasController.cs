@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using MSP_ProyectoMultimedia2024.Services.Repository;
 
 namespace MSP_ProyectoMultimedia2024.Controllers
 {
@@ -17,8 +18,14 @@ namespace MSP_ProyectoMultimedia2024.Controllers
         // GET: Categorias
         public async Task<IActionResult> Index()
         {
-            var categorias = await _categoriasRepository.GetAllAsync();
-            return View(categorias);  // Asegúrate de tener una vista llamada Index.cshtml
+             
+            return View(await _categoriasRepository.GetAllAsync());  
+    
+        }
+        public async Task<IActionResult> ListaCategorias()
+    {
+            return PartialView(await _categoriasRepository.GetAllAsync());
+
         }
 
         // GET: Categorias/Create

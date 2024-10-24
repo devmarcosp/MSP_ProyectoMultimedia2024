@@ -1,0 +1,64 @@
+﻿@model MSP_ProyectoMultimedia2024.Models.Tables.Clases
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div class="container mt-5 p-4" style="background-color: #f0f0f0; border-radius: 10px;">
+    <h1 class="text-center mb-4" style="font-family: Arial, sans-serif; color: #333;">Crear Clase</h1>
+
+    <h4 class="text-center" style="font-family: 'Georgia', serif; color: #555;">Clases</h4>
+    <hr />
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-group">
+                    <label asp-for="Titulo" class="control-label" style="font-weight: bold; color: #444;"></label>
+                    <input asp-for="Titulo" class="form-control" style="border: 1px solid #ccc; border-radius: 5px;" />
+                    <span asp-validation-for="Titulo" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Contenido" class="control-label" style="font-weight: bold; color: #444;"></label>
+                    <input asp-for="Contenido" class="form-control" style="border: 1px solid #ccc; border-radius: 5px;" />
+                    <span asp-validation-for="Contenido" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="UrlVideo" class="control-label" style="font-weight: bold; color: #444;"></label>
+                    <input asp-for="UrlVideo" class="form-control" style="border: 1px solid #ccc; border-radius: 5px;" />
+                    <span asp-validation-for="UrlVideo" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="CursoId" class="control-label" style="font-weight: bold; color: #444;"></label>
+                    <select asp-for="CursoId" class="form-control" asp-items="ViewBag.CursoId" style="border: 1px solid #ccc; border-radius: 5px;"></select>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Orden" class="control-label" style="font-weight: bold; color: #444;"></label>
+                    <input asp-for="Orden" class="form-control" style="border: 1px solid #ccc; border-radius: 5px;" />
+                    <span asp-validation-for="Orden" class="text-danger"></span>
+                </div>
+
+                <div class="form-row mt-4">
+                    <div class="col-md-6">
+                        <a href="/Home/Mantenedores" class="btn btn-secondary" style="width: 100%;">Volver</a>
+                    </div>
+                    <div class="col-md-6 text-right">
+                        <input type="submit" value="Crear Clase" class="btn btn-primary" style="width: 100%;" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

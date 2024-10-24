@@ -25,9 +25,14 @@ namespace MSP_ProyectoMultimedia2024.Controllers
         // GET: Usuarios
         public async Task<IActionResult> Index()
         {
-            var usuarios = await _usuariosService.GetUsuariosAsync();
-            return View(usuarios);
+            return View(await _usuariosService.GetUsuariosAsync());
         }
+
+        public async Task<IActionResult> ListaUsuarios()
+        {
+            return PartialView(await _usuariosService.GetUsuariosAsync());
+        }
+
 
         // GET: Usuarios/Details/5
         public async Task<IActionResult> Details(int? id)

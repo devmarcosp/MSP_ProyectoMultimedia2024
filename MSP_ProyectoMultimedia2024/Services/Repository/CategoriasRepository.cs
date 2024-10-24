@@ -17,13 +17,7 @@ namespace MSP_ProyectoMultimedia2024.Services.Repository
 
         public async Task<List<CategoriasDTO>> GetAllAsync()
         {
-            return await _context.Categorias
-                                 .Select(c => new CategoriasDTO
-                                 {
-                                     Id = c.Id,
-                                     Nombre = c.Nombre
-                                 })
-                                 .ToListAsync();
+            return await _context.Categorias .Select(c => new CategoriasDTO{Id = c.Id, Nombre = c.Nombre}).ToListAsync();
         }
 
         public async Task<CategoriasDTO> GetDetailsAsync(int? id)

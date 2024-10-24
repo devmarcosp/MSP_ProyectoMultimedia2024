@@ -12,13 +12,15 @@ public partial class Cursos
     [Column("id")]
     public int Id { get; set; }
 
+    [Required]
     [Column("titulo")]
     [StringLength(255)]
     [Unicode(false)]
-    public string Titulo { get; set; } = null!;
+    public string Titulo { get; set; }
 
+    [Required]
     [Column("descripcion", TypeName = "text")]
-    public string Descripcion { get; set; } = null!;
+    public string Descripcion { get; set; }
 
     [Column("instructor_id")]
     public int InstructorId { get; set; }
@@ -27,16 +29,15 @@ public partial class Cursos
     public DateTime? FechaCreacion { get; set; }
 
     [InverseProperty("Curso")]
+    public virtual ICollection<CategoriaCurso> CategoriaCurso { get; set; } = new List<CategoriaCurso>();
+
+    [InverseProperty("Curso")]
     public virtual ICollection<Clases> Clases { get; set; } = new List<Clases>();
 
     [ForeignKey("InstructorId")]
     [InverseProperty("Cursos")]
-    public virtual Usuarios Instructor { get; set; } = null!;
+    public virtual Usuarios Instructor { get; set; }
 
     [InverseProperty("Curso")]
     public virtual ICollection<Registro> Registro { get; set; } = new List<Registro>();
-
-    [ForeignKey("CursoId")]
-    [InverseProperty("Curso")]
-    public virtual ICollection<Categorias> Categoria { get; set; } = new List<Categorias>();
 }

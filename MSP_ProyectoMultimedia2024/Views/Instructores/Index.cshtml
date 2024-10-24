@@ -1,0 +1,61 @@
+﻿@model IEnumerable<MSP_ProyectoMultimedia2024.Models.Tables.Instructores>
+
+@{
+    ViewData["Title"] = "Instructores";
+}
+
+<h1>Listado de Instructores</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary btn-lg float-right">Agregar Instructor</a>
+</p>
+
+<table id="instructoresTable" class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>Nombre del Instructor</th>
+            <th>Especialidad</th>
+            <th>Email</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.NombreInstructor)</td>
+                <td>@Html.DisplayFor(modelItem => item.Especialidad)</td>
+                <td>@Html.DisplayFor(modelItem => item.Email)</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.IdInstructor" class="btn btn-sm btn-warning">Editar</a>
+                    <a asp-action="Details" asp-route-id="@item.IdInstructor" class="btn btn-sm btn-info">Detalles</a>
+                    <a asp-action="Delete" asp-route-id="@item.IdInstructor" class="btn btn-sm btn-danger">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/plug-ins/1.11.3/i18n/Spanish.json"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#instructoresTable').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.11.3/i18n/Spanish.json"
+                },
+                "paging": true,
+                "lengthChange": true,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": true
+            });
+        });
+    </script>
+}
